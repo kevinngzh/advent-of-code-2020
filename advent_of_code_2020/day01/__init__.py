@@ -1,15 +1,3 @@
-raw_example = """
-1721
-979
-366
-299
-675
-1456
-"""
-
-example = [int(i) for i in raw_example.strip().split("\n")]
-
-
 def part1(entries):
     pairs = set()
 
