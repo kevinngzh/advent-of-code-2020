@@ -34,5 +34,13 @@ def part1(entries):
     return sum(map(is_valid_password, entries))
 
 
+def is_valid_password_official(entry):
+    policy, password = entry
+
+    position_existences = (password[policy.min - 1] == policy.letter) + (password[policy.max - 1] == policy.letter)
+
+    return position_existences == 1
+
+
 def part2(entries):
-    pass
+    return sum(map(is_valid_password_official, entries))
