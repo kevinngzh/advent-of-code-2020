@@ -47,10 +47,10 @@ if __name__ == "__main__":
 
     args = s.validate(docopt(__doc__, version=__version__))
 
-    entries = [int(i) for i in args["<input_file>"].readlines()]
-
     day = args["<day>"] or _get_latest_day()
     day = importlib.import_module("day{:02d}".format(day))
 
-    print(day.part1(entries))
-    print(day.part2(entries))
+    input_ = day.parse_input(args["<input_file>"].read())
+
+    print(day.part1(input_))
+    print(day.part2(input_))

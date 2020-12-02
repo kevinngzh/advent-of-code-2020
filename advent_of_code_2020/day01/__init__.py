@@ -1,3 +1,7 @@
+def parse_input(input_):
+    return [int(i) for i in input_.split("\n")]
+
+
 def part1(entries):
     pairs = set()
 
