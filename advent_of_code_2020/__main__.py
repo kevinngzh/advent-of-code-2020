@@ -50,7 +50,7 @@ if __name__ == "__main__":
     day = args["<day>"] or _get_latest_day()
     day = importlib.import_module("day{:02d}".format(day))
 
-    input_ = day.parse_input(args["<input_file>"].read())
+    input_ = day.parse_input(args["<input_file>"].read().strip())
 
     print(day.part1(input_))
     print(day.part2(input_))
