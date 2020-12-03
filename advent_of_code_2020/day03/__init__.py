@@ -1,3 +1,4 @@
+import math
 
 
 MAP_VALUES = {
@@ -36,5 +37,15 @@ def part1(grid):
     return get_trees_encountered(grid, (3, 1))
 
 
-def part2(entries):
-    pass
+def part2(grid):
+    slopes = [
+        (1, 1),
+        (3, 1),
+        (5, 1),
+        (7, 1),
+        (1, 2),
+    ]
+
+    slope_trees = [get_trees_encountered(grid, slope) for slope in slopes]
+
+    return math.prod(slope_trees)

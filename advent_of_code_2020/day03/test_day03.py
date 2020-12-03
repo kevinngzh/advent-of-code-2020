@@ -29,4 +29,6 @@ def test_part1(example):
 
 
 def test_part2(example):
-    pass
+    result = part2(example)
+
+    assert result == 336
