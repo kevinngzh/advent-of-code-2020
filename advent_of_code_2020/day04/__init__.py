@@ -73,7 +73,7 @@ class Passport:
 
     @staticmethod
     def is_valid_pid(value):
-        return True
+        return len(value) == 9 and value.isdigit()
 
     @staticmethod
     def is_valid_cid(value):

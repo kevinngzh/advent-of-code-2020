@@ -55,7 +55,6 @@ def test_passport_ecl():
     assert Passport.is_valid_ecl("wat") is False
 
 
-@pytest.mark.xfail
 def test_passport_pid():
     assert Passport.is_valid_pid("000000001") is True
     assert Passport.is_valid_pid("0123456789") is False
