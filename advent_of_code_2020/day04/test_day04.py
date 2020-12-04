@@ -58,8 +58,7 @@ def test_passport_pid():
     assert Passport.is_valid_pid("0123456789") is False
 
 
-@pytest.mark.xfail
-def test_part2():
+def test_valid_passports():
     invalid_raw_examples = """
 eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
@@ -94,7 +93,7 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
     valid_examples = parse_input(valid_raw_examples.strip())
 
     for example in invalid_examples:
-        assert Passport(example).is_valid is False
+        assert example.is_strict_valid(["cid"]) is False
 
     for example in valid_examples:
-        assert Passport(example).is_valid is True
+        assert example.is_strict_valid(["cid"]) is True

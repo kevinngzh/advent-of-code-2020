@@ -42,12 +42,21 @@ class Passport:
         for field in self.FIELDS:
             if optional and field in optional:
                 continue
+            elif getattr(self, field) is None:
+                return False
+
+        return True
+
+    def is_strict_valid(self, optional=None):
+        for field in self.FIELDS:
+            if optional and field in optional:
+                continue
+            elif getattr(self, field) is None:
+                return False
 
             value = getattr(self, field)
 
-            if value is None:
-                return False
-            elif getattr(self, f"is_valid_{field}")(value) is False:
+            if getattr(self, f"is_valid_{field}")(value) is False:
                 return False
 
         return True
@@ -109,4 +118,4 @@ def part1(passports):
 
 
 def part2(passports):
-    pass
+    return sum(passport.is_strict_valid(["cid"]) for passport in passports)
