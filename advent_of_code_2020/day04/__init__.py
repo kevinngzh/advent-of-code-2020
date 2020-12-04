@@ -1,13 +1,17 @@
 class Passport:
     FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
+    VALID_BYRS = (1920, 2002)
+    VALID_IYRS = (2010, 2020)
+    VALID_EYRS = (2020, 2030)
     VALID_ECLS = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
     def __init__(self, data):
         parsed_data = self._parse_data(data)
+        intize = lambda key: int(parsed_data[key]) if key in parsed_data else None
 
-        self.byr = parsed_data.get("byr", None)
-        self.iyr = parsed_data.get("iyr", None)
-        self.eyr = parsed_data.get("eyr", None)
+        self.byr = intize("byr")
+        self.iyr = intize("iyr")
+        self.eyr = intize("eyr")
         self.hgt = parsed_data.get("hgt", None)
         self.hcl = parsed_data.get("hcl", None)
         self.ecl = parsed_data.get("ecl", None)
@@ -40,16 +44,20 @@ class Passport:
         return True
 
     @staticmethod
-    def is_valid_byr(value):
-        return True
+    def is_value_in_range(rng, value):
+        return rng[0] <= value <= rng[1]
 
-    @staticmethod
-    def is_valid_iyr(value):
-        return True
+    @classmethod
+    def is_valid_byr(cls, value):
+        return cls.is_value_in_range(cls.VALID_BYRS, value)
 
-    @staticmethod
-    def is_valid_eyr(value):
-        return True
+    @classmethod
+    def is_valid_iyr(cls, value):
+        return cls.is_value_in_range(cls.VALID_IYRS, value)
+
+    @classmethod
+    def is_valid_eyr(cls, value):
+        return cls.is_value_in_range(cls.VALID_EYRS, value)
 
     @staticmethod
     def is_valid_hgt(value):

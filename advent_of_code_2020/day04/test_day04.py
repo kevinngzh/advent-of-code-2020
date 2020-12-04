@@ -30,7 +30,6 @@ def test_part1(example):
     assert result == 2
 
 
-@pytest.mark.xfail
 def test_passport_byr():
     assert Passport.is_valid_byr(2002) is True
     assert Passport.is_valid_byr(2003) is False
