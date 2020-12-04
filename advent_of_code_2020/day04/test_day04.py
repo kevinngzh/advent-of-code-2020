@@ -35,7 +35,6 @@ def test_passport_byr():
     assert Passport.is_valid_byr(2003) is False
 
 
-@pytest.mark.xfail
 def test_passport_hgt():
     assert Passport.is_valid_hgt("60in") is True
     assert Passport.is_valid_hgt("190cm") is True

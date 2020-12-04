@@ -6,6 +6,11 @@ class Passport:
     VALID_BYRS = (1920, 2002)
     VALID_IYRS = (2010, 2020)
     VALID_EYRS = (2020, 2030)
+    VALID_HGTS = {
+        "pattern": r"(\d*?)(cm|in)$",
+        "cm": (150, 193),
+        "in": (59, 76),
+    }
     VALID_HCLS = r"#[0-9a-f]{6}$"
     VALID_ECLS = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
@@ -63,9 +68,18 @@ class Passport:
     def is_valid_eyr(cls, value):
         return cls.is_value_in_range(cls.VALID_EYRS, value)
 
-    @staticmethod
-    def is_valid_hgt(value):
-        return True
+    @classmethod
+    def is_valid_hgt(cls, value):
+        condition = cls.VALID_HGTS
+        match = re.match(condition["pattern"], value)
+
+        if match is not None:
+            value, unit = match.groups()
+            min_, max_ = condition[unit]
+
+            return min_ <= int(value) <= max_
+
+        return False
 
     @classmethod
     def is_valid_hcl(cls, value):
