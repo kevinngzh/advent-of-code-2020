@@ -43,7 +43,6 @@ def test_passport_hgt():
     assert Passport.is_valid_hgt("190") is False
 
 
-@pytest.mark.xfail
 def test_passport_hcl():
     assert Passport.is_valid_hcl("#123abc") is True
     assert Passport.is_valid_hcl("#123abz") is False

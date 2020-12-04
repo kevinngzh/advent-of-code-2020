@@ -1,8 +1,12 @@
+import re
+
+
 class Passport:
     FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
     VALID_BYRS = (1920, 2002)
     VALID_IYRS = (2010, 2020)
     VALID_EYRS = (2020, 2030)
+    VALID_HCLS = r"#[0-9a-f]{6}$"
     VALID_ECLS = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
     def __init__(self, data):
@@ -63,9 +67,9 @@ class Passport:
     def is_valid_hgt(value):
         return True
 
-    @staticmethod
-    def is_valid_hcl(value):
-        return True
+    @classmethod
+    def is_valid_hcl(cls, value):
+        return re.match(cls.VALID_HCLS, value) is not None
 
     @classmethod
     def is_valid_ecl(cls, value):
