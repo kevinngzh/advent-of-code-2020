@@ -51,7 +51,6 @@ def test_passport_hcl():
     assert Passport.is_valid_hcl("123abc") is False
 
 
-@pytest.mark.xfail
 def test_passport_ecl():
     assert Passport.is_valid_ecl("brn") is True
     assert Passport.is_valid_ecl("wat") is False

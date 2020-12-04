@@ -1,5 +1,6 @@
 class Passport:
     FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
+    VALID_ECLS = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
     def __init__(self, data):
         parsed_data = self._parse_data(data)
@@ -58,9 +59,9 @@ class Passport:
     def is_valid_hcl(value):
         return True
 
-    @staticmethod
-    def is_valid_ecl(value):
-        return True
+    @classmethod
+    def is_valid_ecl(cls, value):
+        return value in cls.VALID_ECLS
 
     @staticmethod
     def is_valid_pid(value):
