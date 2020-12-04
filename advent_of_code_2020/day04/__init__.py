@@ -28,9 +28,46 @@ class Passport:
         for field in self.FIELDS:
             if optional and field in optional:
                 continue
-            elif getattr(self, field) is None:
+
+            value = getattr(self, field)
+
+            if value is None:
+                return False
+            elif getattr(self, f"is_valid_{field}")(value) is False:
                 return False
 
+        return True
+
+    @staticmethod
+    def is_valid_byr(value):
+        return True
+
+    @staticmethod
+    def is_valid_iyr(value):
+        return True
+
+    @staticmethod
+    def is_valid_eyr(value):
+        return True
+
+    @staticmethod
+    def is_valid_hgt(value):
+        return True
+
+    @staticmethod
+    def is_valid_hcl(value):
+        return True
+
+    @staticmethod
+    def is_valid_ecl(value):
+        return True
+
+    @staticmethod
+    def is_valid_pid(value):
+        return True
+
+    @staticmethod
+    def is_valid_cid(value):
         return True
 
 
@@ -44,5 +81,5 @@ def part1(passports):
     return sum(passport.is_valid(["cid"]) for passport in passports)
 
 
-def part2(entries):
+def part2(passports):
     pass
