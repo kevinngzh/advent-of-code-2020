@@ -37,8 +37,10 @@ def generate_seat_id(boarding_pass):
     return Seat(boarding_pass, row, column, (row * 8) + column)
 
 
-def part1(entries):
-    pass
+def part1(boarding_passes):
+    seat_ids = [generate_seat_id(boarding_pass).seat_id for boarding_pass in boarding_passes]
+
+    return max(seat_ids)
 
 
 def part2(entries):
