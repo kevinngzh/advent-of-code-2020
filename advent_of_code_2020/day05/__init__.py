@@ -43,5 +43,17 @@ def part1(boarding_passes):
     return max(seat_ids)
 
 
-def part2(entries):
-    pass
+def part2(boarding_passes):
+    seat_ids = sorted(generate_seat_id(boarding_pass).seat_id for boarding_pass in boarding_passes)
+
+    results = []
+
+    # Iterate from second `seat_id` to the second-last `seat_id`.
+    # We are interested in `seat_id`s where `seat_id + 1` or `seat_id - 1` is
+    # not in `seat_ids`.
+    # Actual result should be between the two items in `results`?
+    for seat_id in seat_ids[1:-1]:
+        if seat_id + 1 not in seat_ids or seat_id - 1 not in seat_ids:
+            results.append(seat_id)
+
+    return results
