@@ -64,5 +64,20 @@ def part1(luggage_rules):
     return sum(searched.values())
 
 
-def part2(entries):
-    pass
+def get_bag_number(luggage_rules, bag):
+    # Oops should have made `luggage_rules` a `dict`.
+    bag_rule = [rule for rule in luggage_rules if rule.bag == bag]
+
+    assert len(bag_rule) == 1
+    bag_rule = bag_rule[0]
+
+    if bag_rule.contains is None:
+        return 0
+    else:
+        return sum((get_bag_number(luggage_rules, contains_bag) + 1) * bag_rule.contains[contains_bag] for contains_bag in bag_rule.contains)
+
+
+def part2(luggage_rules):
+    search_bag = Bag("shiny", "gold")
+
+    return get_bag_number(luggage_rules, search_bag)
