@@ -1,6 +1,6 @@
 import pytest
 
-from .__init__ import parse_input, part1
+from .__init__ import parse_input, part1, Device
 
 
 @pytest.fixture
@@ -26,5 +26,11 @@ def test_part1(example):
     assert result == 5
 
 
-def test_part2(example):
-    pass
+def test_instruction_change(example):
+    device = Device(example)
+    device.code[-2] = ("nop", device.code[-2][1])
+
+    while device.index < len(device.code):
+        device.execute()
+
+    assert device.accumulator == 8

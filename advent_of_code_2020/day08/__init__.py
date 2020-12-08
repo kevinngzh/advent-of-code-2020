@@ -10,7 +10,7 @@ def parse_input(input_):
 
 class Device:
     def __init__(self, code, index=0, accumulator=0):
-        self.code = code
+        self.code = code.copy()
         self.index = index
 
         self.accumulator = accumulator
@@ -45,5 +45,25 @@ def part1(code):
             device.execute()
 
 
-def part2(entries):
-    pass
+def part2(code):
+    device = Device(code)
+    results = []
+
+    for i in range(len(device.code)):
+        if (op := device.code[i][0]) in ["nop", "jmp"]:
+            current_device = Device(code)
+            new_op = "jmp" if op == "nop" else "nop"
+
+            current_device.code[i] = (new_op, current_device.code[i][1])
+
+            try:
+                while True:
+                    if current_device.index in current_device.accessed:
+                        break
+                    else:
+                        current_device.execute()
+            except IndexError:
+                results.append((i, current_device.accumulator))
+
+    return results
+
