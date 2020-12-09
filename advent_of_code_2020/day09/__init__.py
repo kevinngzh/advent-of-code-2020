@@ -16,5 +16,18 @@ def part1(data, preamble_length=25):
             return data[i]
 
 
-def part2(entries):
-    pass
+def part2(data):
+    first_invalid = part1(data)
+
+    for first in range(len(data)):
+        for last in range(first + 1, len(data)):
+            print(first, last)
+
+            contiguous_sum = sum(data[first:last])
+
+            if contiguous_sum == first_invalid:
+                min_, *_, max_ = sorted(data[first:last])
+
+                return min_ + max_
+            elif contiguous_sum > first_invalid:
+                break
