@@ -16,5 +16,24 @@ def part1(joltages):
     return differences[0] * differences[2]
 
 
-def part2(entries):
-    pass
+def part2(joltages):
+    sorted_joltages = sorted(joltages)
+
+    # Since the built-in adapter is always 3 higher than then highest adapter, the highest adapter must ALWAYS be part of an arrangement.
+    # Not necessary true of the lowest adapter; if both 1 jolt and 3 jolt adapters are present, we can select either of them.
+
+    found_ways = {0: 1}
+
+    for joltage in sorted_joltages:
+        joltage_way = 0
+
+        for difference in range(1, 4):
+            joltage_difference = joltage - difference
+
+            if joltage_difference in found_ways:
+                joltage_way += found_ways[joltage_difference]
+
+        found_ways[joltage] = joltage_way
+
+    return found_ways[max(joltages)]
+

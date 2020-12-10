@@ -1,4 +1,4 @@
-from .__init__ import parse_input, part1
+from .__init__ import parse_input, part1, part2
 
 
 raw_example_1 = """
@@ -56,3 +56,8 @@ example_2 = parse_input(raw_example_2.strip())
 def test_part1():
     assert part1(example_1) == 7 * 5
     assert part1(example_2) == 22 * 10
+
+
+def test_part2():
+    assert part2(example_1) == 8
+    assert part2(example_2) == 19208
