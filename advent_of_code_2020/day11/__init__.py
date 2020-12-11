@@ -68,6 +68,50 @@ class SeatLayout:
         return sum(bool(value) for value in self.grid.values())
 
 
+class FarseeingSeatLayout(SeatLayout):
+    DIRECTIONS = (
+        (-1, 0),
+        (1, 0),
+        (0, -1),
+        (0, 1),
+        (-1, -1),
+        (-1, 1),
+        (1, 1),
+        (1, -1),
+    )
+
+    def get_visible_neighbor(self, position, direction):
+        x, y = position
+        i, j = direction
+
+        while True:
+            x += i
+            y += j
+
+            if not 0 <= x < self.max_x:
+                return None
+            elif not 0 <= y < self.max_y:
+                return None
+            elif self.grid[x, y] is not None:
+                return self.grid[x, y]
+            # else: pass
+
+    def next_state(self, position):
+        x, y = position
+        current_occupied = self.grid[position]
+
+        visible_neighbors = [self.get_visible_neighbor(position, direction) for direction in self.DIRECTIONS]
+
+        occupieds = sum(bool(neighbor) for neighbor in visible_neighbors)
+
+        if current_occupied is False and occupieds == 0:
+            return True
+        elif current_occupied is True and occupieds >= 5:
+            return False
+        else:
+            return current_occupied
+
+
 def part1(grid):
     seat_layout = SeatLayout(grid.copy())
 
@@ -78,5 +122,11 @@ def part1(grid):
         return seat_layout.occupied_seats()
 
 
-def part2(entries):
-    pass
+def part2(grid):
+    seat_layout = FarseeingSeatLayout(grid.copy())
+
+    try:
+        while True:
+            seat_layout.next_grid()
+    except StopIteration:
+        return seat_layout.occupied_seats()
