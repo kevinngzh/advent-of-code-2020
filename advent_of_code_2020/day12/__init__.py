@@ -58,6 +58,55 @@ class NavigationComputer:
         self.y += move_y
 
 
+class WaypointNavigationComputer(NavigationComputer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.waypoint = (10, 1)
+
+    def __next__(self):
+        action, value = self.instructions[self.index]
+
+        if action in "NSEW":
+            self.move_waypoint(action, value)
+        elif action in "LR":
+            self.turn_waypoint(action, value)
+        else:  # if action == "F"
+            self.forward(action, value)
+
+        self.index += 1
+
+    def turn_waypoint(self, direction, value):
+        x, y = self.waypoint
+        turns = int(value / 90)
+
+        for _ in range(turns):
+            if direction == "L":
+                x, y = -y, x
+            else:  # if direction == "R"
+                x, y = y, -x
+
+        self.waypoint = x, y
+
+    def move_waypoint(self, direction, value):
+        x, y = self.waypoint
+
+        base_i, base_j = DIRECTIONS[direction]
+        i = base_i * value
+        j = base_j * value
+
+        self.waypoint = x + i, y + j
+
+    def forward(self, direction, value):
+        base_x, base_y = self.waypoint
+
+        move_x = base_x * value
+        move_y = base_y * value
+
+        self.x += move_x
+        self.y += move_y
+
+
 def part1(instructions):
     nav = NavigationComputer(instructions)
 
@@ -68,5 +117,11 @@ def part1(instructions):
             return nav.manhattan_distance
 
 
-def part2(entries):
-    pass
+def part2(instructions):
+    nav = WaypointNavigationComputer(instructions)
+
+    while True:
+        try:
+            next(nav)
+        except IndexError:
+            return nav.manhattan_distance
