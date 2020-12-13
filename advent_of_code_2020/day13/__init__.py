@@ -33,3 +33,26 @@ def part1(data):
 
 def part2(data):
     _, bus_ids = data
+    constrained_bus_ids = {}
+
+    for offset, bus_id in enumerate(bus_ids):
+        if bus_id is not None:
+            constrained_bus_ids[bus_id] = offset
+
+    num = 0
+    while True:
+        check = 0
+        valids = []
+
+        for bus_id, offset in constrained_bus_ids.items():
+            if (num + offset) % bus_id == 0:
+                check += 1
+                valids.append(bus_id)
+
+        if check:
+            print(num, check, valids)
+
+        if check == len(constrained_bus_ids):
+            return num
+        else:
+            num += 1
