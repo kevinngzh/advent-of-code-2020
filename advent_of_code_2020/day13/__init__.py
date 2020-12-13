@@ -1,5 +1,6 @@
 from collections import namedtuple
 import math
+import operator
 
 
 Bus = namedtuple("Bus", ["id", "offset"])
@@ -40,7 +41,9 @@ def part1(data):
 
 def find_first_occurence(buses):
     lcm = math.lcm(*(bus.id for bus in buses))
-    step, num = buses[0]
+    sorted_buses = sorted(buses, key=operator.itemgetter(0))
+    largest = sorted_buses.pop()
+    num = -largest.offset
 
     while num < lcm:
         check = 0
@@ -57,7 +60,7 @@ def find_first_occurence(buses):
         if check == len(buses):
             return num
         else:
-            num += step
+            num += largest.id
 
 
 def part2(data):
