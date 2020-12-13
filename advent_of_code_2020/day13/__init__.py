@@ -55,7 +55,7 @@ def find_first_occurence(buses):
                 valids.append(bus.id)
 
         if check:
-            print(num, check, valids)
+            pass#rint(num, check, valids)
 
         if check == len(buses):
             return num
@@ -66,9 +66,18 @@ def find_first_occurence(buses):
 def part2(data):
     _, bus_ids = data
     buses = []
+    multiple = Bus(1, 0)
 
     for offset, bus_id in enumerate(bus_ids):
         if bus_id is not None:
             buses.append(Bus(bus_id, offset))
 
-    return find_first_occurence(buses)
+    sorted_buses = sorted(buses, key=operator.itemgetter(0))
+
+    for current_bus in sorted_buses:
+        lcm = math.lcm(multiple.id, current_bus.id)
+        offset = find_first_occurence([multiple, current_bus])
+
+        multiple = Bus(lcm, -offset)
+
+    return -multiple.offset  # Erm, why?
