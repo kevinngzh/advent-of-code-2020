@@ -1,3 +1,10 @@
+from collections import namedtuple
+import math
+
+
+Bus = namedtuple("Bus", ["id", "offset"])
+
+
 def parse_bus_ids(raw_bus_ids):
     bus_ids = []
 
@@ -31,28 +38,34 @@ def part1(data):
         wait_time += 1
 
 
-def part2(data):
-    _, bus_ids = data
-    constrained_bus_ids = {}
+def find_first_occurence(buses):
+    lcm = math.lcm(*(bus.id for bus in buses))
+    step, num = buses[0]
 
-    for offset, bus_id in enumerate(bus_ids):
-        if bus_id is not None:
-            constrained_bus_ids[bus_id] = offset
-
-    num = 0
-    while True:
+    while num < lcm:
         check = 0
         valids = []
 
-        for bus_id, offset in constrained_bus_ids.items():
-            if (num + offset) % bus_id == 0:
+        for bus in buses:
+            if (num + bus.offset) % bus.id == 0:
                 check += 1
-                valids.append(bus_id)
+                valids.append(bus.id)
 
         if check:
             print(num, check, valids)
 
-        if check == len(constrained_bus_ids):
+        if check == len(buses):
             return num
         else:
-            num += 1
+            num += step
+
+
+def part2(data):
+    _, bus_ids = data
+    buses = []
+
+    for offset, bus_id in enumerate(bus_ids):
+        if bus_id is not None:
+            buses.append(Bus(bus_id, offset))
+
+    return find_first_occurence(buses)
