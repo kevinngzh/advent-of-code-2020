@@ -1,5 +1,4 @@
-def parse_input(input_):
-    raw_timestamp, raw_bus_ids = input_.split("\n")
+def parse_bus_ids(raw_bus_ids):
     bus_ids = []
 
     for raw_bus_id in raw_bus_ids.split(","):
@@ -10,7 +9,13 @@ def parse_input(input_):
         finally:
             bus_ids.append(bus_id)
 
-    return int(raw_timestamp), bus_ids
+    return bus_ids
+
+
+def parse_input(input_):
+    raw_timestamp, raw_bus_ids = input_.split("\n")
+
+    return int(raw_timestamp), parse_bus_ids(raw_bus_ids)
 
 
 def part1(data):
@@ -26,5 +31,5 @@ def part1(data):
         wait_time += 1
 
 
-def part2(entries):
-    pass
+def part2(data):
+    _, bus_ids = data
