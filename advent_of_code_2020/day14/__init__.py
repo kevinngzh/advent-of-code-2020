@@ -32,11 +32,11 @@ class SeaportComputer:
         else: # if current_instruction[1] == "mem"
             address, value = current_instruction[1:]
 
-            self.memory[address] = self.apply_mask(value)
+            self.apply_mask(address, value)
 
         self.index += 1
 
-    def apply_mask(self, value):
+    def apply_mask(self, address, value):
         bits = ["0"] * 36
         bin_value = bin(value)[2:]
 
@@ -52,7 +52,7 @@ class SeaportComputer:
             if bit is not None:
                 bits[-i-1] = bit
 
-        return int("".join(bits), base=2)
+        self.memory[address] = int("".join(bits), base=2)
 
 
 class SeaportComputerV2(SeaportComputer):
