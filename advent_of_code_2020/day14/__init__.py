@@ -55,6 +55,10 @@ class SeaportComputer:
         return int("".join(bits), base=2)
 
 
+class SeaportComputerV2(SeaportComputer):
+    raise NotImplementedError
+
+
 def part1(program):
     computer = SeaportComputer(program)
 
@@ -65,5 +69,11 @@ def part1(program):
             return sum(computer.memory.values())
 
 
-def part2(entries):
-    pass
+def part2(program):
+    computer = SeaportComputerV2(program)
+
+    while True:
+        try:
+            next(computer)
+        except IndexError:
+            return sum(computer.memory.values())
