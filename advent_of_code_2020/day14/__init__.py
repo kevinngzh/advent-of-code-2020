@@ -56,7 +56,44 @@ class SeaportComputer:
 
 
 class SeaportComputerV2(SeaportComputer):
-    raise NotImplementedError
+    def get_float(self, value):
+        bits = ["0"] * 36
+        bin_value = bin(value)[2:]
+
+        for i in range(len(bits)):
+            bit = None
+            mask_bit = self.current_mask[-i-1]
+
+            if i < len(bin_value):
+                bits[-i-1] = bin_value[-i-1]
+
+            if mask_bit != "0":
+                bit = mask_bit
+
+            if bit is not None:
+                bits[-i-1] = bit
+
+        return bits
+
+    def apply_mask(self, address, value):
+        floats = [self.get_float(address)]
+        addresses = []
+
+        while len(floats):
+            float_ = floats.pop()
+
+            if "X" in float_:
+                x_index = float_.index("X")
+
+                for i in range(2):
+                    lst = float_.copy()
+                    lst[x_index] = str(i)  # lol have to convert to `str` to `join()`
+                    floats.append(lst)
+            else:
+                addresses.append(int("".join(float_), base=2))
+
+        for address in addresses:
+            self.memory[address] = value
 
 
 def part1(program):
