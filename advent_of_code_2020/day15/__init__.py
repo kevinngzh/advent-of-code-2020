@@ -40,5 +40,11 @@ def part1(starting_numbers):
     return game.last_number
 
 
-def part2(entries):
-    pass
+def part2(starting_numbers):
+    attempts = 30_000_000
+    game = MemoryGame(starting_numbers)
+
+    for i in range(attempts):
+        next(game)
+
+    return game.last_number
