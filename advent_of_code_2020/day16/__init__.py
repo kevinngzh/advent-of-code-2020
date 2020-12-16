@@ -40,15 +40,21 @@ class TicketValidator:
         self.rules = rules
 
     def is_any_valid(self, value):
-        for valid_ranges in self.rules.values():
-            if self.is_valid(valid_ranges, value):
+        for key in self.rules.keys():
+            if self.is_valid(key, value):
                 return True
 
         return False
+
+    def is_valid_ticket(self, ticket):
+        for value in ticket:
+            if not self.is_any_valid(value):
+                return False
+
+        return True
  
-    @staticmethod
-    def is_valid(ranges, value):
-        for first, last in ranges:
+    def is_valid(self, key, value):
+        for first, last in self.rules[key]:
             if first <= value <= last:
                 return True
 
