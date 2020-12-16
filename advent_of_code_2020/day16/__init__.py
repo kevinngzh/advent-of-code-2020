@@ -75,5 +75,53 @@ def part1(input_):
     return error_rate
 
 
-def part2(entries):
-    pass
+def get_possibilities(validator, tickets):
+    keys = validator.rules.keys()
+    possibilities = {key: list(range(len(keys))) for key in keys}
+
+    for key, possibles in possibilities.items():
+        for ticket in tickets:
+            for possible in possibles:
+                if not validator.is_valid(key, ticket[possible]):
+                    possibles.remove(possible)
+
+    return possibilities
+
+
+def resolve_possibilities(possibilities):
+    key_indices = {}
+
+    while len(possibilities):
+        sorted_keys = sorted(possibilities.keys(), key=lambda k: len(possibilities[k]))
+        first_key = sorted_keys[0]
+
+        if len(possibilities[first_key]) == 1:
+            only_key_idx, = possibilities.pop(first_key)
+            key_indices[first_key] = only_key_idx
+
+            for key in sorted_keys[1:]:
+                possibilities[key].remove(only_key_idx)
+        else:
+            key_indices.update(possibilities)
+            break
+
+    return key_indices
+
+
+def part2(input_):
+    rules, your_ticket, nearby_tickets = input_
+    result = 1
+
+    validator = TicketValidator(rules)
+
+    valid_nearby_tickets = list(filter(lambda ticket: validator.is_valid_ticket(ticket), nearby_tickets))
+
+    possibilities = get_possibilities(validator, valid_nearby_tickets)
+    key_indices = resolve_possibilities(possibilities)
+    
+    departure_indices = [idx for key, idx in key_indices.items() if key.startswith("departure")]
+
+    for idx in departure_indices:
+        result *= your_ticket[idx]
+
+    return result
