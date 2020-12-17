@@ -118,6 +118,69 @@ class PocketDimension:
         return coordinates
 
 
+class HyperPocketDimension(PocketDimension):
+    def __init__(self, initial_state):
+        self.actives = [(*coordinate, 0) for coordinate, state in initial_state.items() if state is True]
+
+        self.i = 0
+
+    def get_region_of_interest(self):
+        min_x, min_y, min_z, min_w = self.actives[0]
+        max_x, max_y, max_z, max_w = self.actives[0]
+
+        for coordinate in self.actives:
+            x, y, z, w = coordinate
+
+            if x < min_x:
+                min_x = x
+            if x > max_x:
+                max_x = x
+
+            if y < min_y:
+                min_y = y
+            if y > max_y:
+                max_y = y
+
+            if z < min_z:
+                min_z = z
+            if z > max_z:
+                max_z = z
+
+            if w < min_w:
+                min_w = w
+            if w > max_w:
+                max_w = w
+
+        return [
+            (x, y, z, w)
+            for x in range(min_x - 1, max_x + 2)
+            for y in range(min_y - 1, max_y + 2)
+            for z in range(min_z - 1, max_z + 2)
+            for w in range(min_w - 1, max_w + 2)
+        ]
+
+    @staticmethod
+    def get_neighbor_coordinates(center):
+        x, y, z, w = center
+        coordinates = [center]
+
+        for dim in range(len(center)):
+            next_coordinates = []
+
+            for ref in coordinates:
+                for i in range(-1, 2):
+                    next_coordinate = list(ref)
+                    next_coordinate[dim] += i
+
+                    next_coordinates.append(tuple(next_coordinate))
+
+            coordinates = next_coordinates
+
+        coordinates.remove(center)
+
+        return coordinates
+
+
 def part1(grid):
     pocket = PocketDimension(grid)
 
@@ -127,5 +190,10 @@ def part1(grid):
     return len(pocket.actives)
 
 
-def part2(entries):
-    pass
+def part2(grid):
+    pocket = HyperPocketDimension(grid)
+
+    for i in range(6):
+        next(pocket)
+
+    return len(pocket.actives)
