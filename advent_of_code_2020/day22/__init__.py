@@ -74,5 +74,90 @@ def part1(decks):
         return max(scores)
 
 
-def part2(entries):
-    pass
+class RecursiveCombatGame(CombatGame):
+    last_id = 0
+
+    def __init__(self, decks, depth=0):
+        super().__init__(decks)
+
+        self.id = self.next_id
+        self.depth = depth
+
+        self.previous_rounds = []
+
+    def __next__(self):
+        played_cards = {}
+        can_recurse_cards = []
+
+        self.round += 1
+
+        if self.is_looping_round():
+            raise RuntimeError
+
+        for player, deck in self.decks.items():
+            played_card = deck.pop(0)
+            played_cards[played_card] = player
+
+            can_recurse_cards.append(played_card <= len(deck))
+
+        if all(can_recurse_cards):
+            game = RecursiveCombatGame([
+                (player, self.decks[player][:value])
+                for value, player in played_cards.items()
+            ], depth=self.depth+1)
+
+            winner = game.play()
+
+            for card, player in played_cards.items():
+                if player == winner:
+                    winning_card = card
+                    assert winner == played_cards.pop(winning_card)
+                    break
+        else:
+            winning_card = max(played_cards.keys())
+            winner = played_cards.pop(winning_card)
+
+        self.decks[winner].append(winning_card)
+        self.decks[winner].extend(list(played_cards))
+
+        for deck in self.decks.values():
+            if not len(deck):
+                raise StopIteration
+
+    @classmethod
+    @property
+    def next_id(self):
+        self.last_id += 1
+
+        return self.last_id
+
+    def is_looping_round(self):
+        current_round = tuple(tuple(deck) for deck in self.decks.values())
+
+        if current_round in self.previous_rounds:
+            return True
+        else:
+            self.previous_rounds.append(current_round)
+
+            return False
+
+    def play(self):
+        try:
+            while True:
+                next(self)
+        except RuntimeError:
+            winner = 1
+        except StopIteration:
+            scores = {self.get_score(player): player for player in self.decks}
+            winning_score = max(scores)
+            winner = scores[winning_score]
+
+        return winner
+
+
+def part2(decks):
+    game = RecursiveCombatGame(decks)
+
+    winner = game.play()
+
+    return game.get_score(winner)
