@@ -48,15 +48,21 @@ def get_tile_coordinates(tile_directions):
     return x, y
 
 
-def part1(tile_directions):
-    tiles = defaultdict(int)
+def get_tile_state(tile_directions):
+    tiles = defaultdict(bool)
 
     for directions in tile_directions:
         coordinates = get_tile_coordinates(directions)
-        tiles[coordinates] += 1
+        tiles[coordinates] = not tiles[coordinates]
+
+    return tiles
+
+
+def part1(tile_directions):
+    tiles = get_tile_state(tile_directions)
 
     # Tiles start as white, then gets flipped to black, then back to white, so if a tile gets flipped an odd number of times it's black.
-    return sum(flipped_times % 2 == 1 for flipped_times in tiles.values())
+    return sum(tiles.values())
 
 
 def part2(entries):
